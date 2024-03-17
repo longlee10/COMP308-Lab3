@@ -58,6 +58,7 @@ const resolvers = {
         return true;
       } catch (error) {
         console.error("Error in signUp resolver: ", error);
+        console.log(error.message);
         return false;
       }
     },

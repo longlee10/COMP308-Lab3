@@ -1,20 +1,8 @@
 // user-app/src/UserComponent.jsx
 import React, { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Alert, Button, Form, Container, Nav, Spinner } from "react-bootstrap";
-
-// GraphQL mutations
-const LOGIN_MUTATION = gql`
-  mutation Login($username: String!, $password: String!) {
-    login(username: $username, password: $password)
-  }
-`;
-
-const REGISTER_MUTATION = gql`
-  mutation Register($username: String!, $password: String!) {
-    register(username: $username, password: $password)
-  }
-`;
+import { LOGIN_MUTATION, REGISTER_MUTATION } from "./queries/authQueries";
 
 function UserComponent() {
   const [username, setUsername] = useState("");
@@ -38,7 +26,10 @@ function UserComponent() {
       alert("Registration successful! Please log in.");
       setActiveTab("login"); // Switch to login view
     },
-    onError: (error) => setAuthError(error.message || "Registration failed"),
+    onError: (error) => {
+      setAuthError(error.message || "Registration failed");
+      console.log(error);
+    },
   });
 
   const handleSubmit = async (e) => {
@@ -53,8 +44,10 @@ function UserComponent() {
     }
 
     if (activeTab === "login") {
+      console.log("Logging in...");
       await login({ variables: { username, password } });
     } else {
+      console.log("Registering...");
       await register({ variables: { username, password } });
     }
     setIsSubmitting(false);

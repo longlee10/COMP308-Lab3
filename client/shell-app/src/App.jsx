@@ -4,7 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 import "./App.css";
 
 const UserApp = lazy(() => import("userApp/App"));
-const ProductApp = lazy(() => import("productApp/App"));
+// const ProductApp = lazy(() => import("productApp/App"));
 
 // GraphQL query to check the current user's authentication status
 const CURRENT_USER_QUERY = gql`
@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <Suspense fallback={<div>Loading...</div>}>
-        {!isLoggedIn ? <UserApp /> : <ProductApp />}
+        {!isLoggedIn ? <UserApp /> : <>Hello World</>}
       </Suspense>
     </div>
   );
