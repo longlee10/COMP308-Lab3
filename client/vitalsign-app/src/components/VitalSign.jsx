@@ -1,18 +1,8 @@
+import { useQuery } from "@apollo/client";
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
 import { Table } from "react-bootstrap";
-
-const VITAL_SIGNS = gql`
-query {
-    vitalSigns {
-      bloodPressure
-      heartRate
-      id
-      respiratoryRate
-      temperature
-    }
-  }
-`;
+import { VITAL_SIGNS } from "../queries/vitalSignQueries";
+import { Link } from "react-router-dom";
 
 const VitalSign = () => {
   const { loading, error, data } = useQuery(VITAL_SIGNS);
@@ -22,6 +12,9 @@ const VitalSign = () => {
   console.log(data.vitalSigns);
   return (
     <div>
+      <Link to="/addVitalSign" className="btn btn-primary">
+        Add Vital Sign
+      </Link>
       <h2>Vital Signs</h2>
       <Table striped bordered hover>
         <thead>
@@ -30,6 +23,7 @@ const VitalSign = () => {
             <th>Blood Pressure</th>
             <th>Heart Rate</th>
             <th>Respiratory Rate</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +34,14 @@ const VitalSign = () => {
                 <td>{vitalSign.bloodPressure}</td>
                 <td>{vitalSign.heartRate}</td>
                 <td>{vitalSign.respiratoryRate}</td>
+                <td>
+                  <Link
+                    to={`/edit/${vitalSign.id}`}
+                    className="btn btn-success"
+                  >
+                    Edit
+                  </Link>
+                </td>
               </tr>
             ))}
         </tbody>
