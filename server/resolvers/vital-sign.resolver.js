@@ -11,6 +11,7 @@ const resolvers = {
         }
 
         const vitalSigns = await VitalSign.find({});
+        console.log(vitalSigns);
         return vitalSigns;
       } catch (error) {
         console.error("Error in vitalSigns resolver: ", error);
