@@ -1,30 +1,25 @@
-import { useMutation } from "@apollo/client";
 import React from "react";
 import Form from "react-bootstrap/Form";
-import { ADD_VITAL_SIGN } from "../queries/vitalSignQueries";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import {
+  useAddVitalSign,
+  useUpdateVitalSign,
+  useGetVitalSignById,
+} from "../hooks/useVitalSign";
 
 const VitalSignForm = () => {
-  const [addVitalSign] = useMutation(ADD_VITAL_SIGN);
-  const navigate = useNavigate();
+  const { id } = useParams();
+  const handleAdd = useAddVitalSign();
+  const handleUpdate = useUpdateVitalSign();
+  const { loading, error, data } = useGetVitalSignById(id);
+
   let temperature, bloodPressure, heartRate, respiratoryRate;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addVitalSign({
-      variables: {
-        temperature: parseFloat(temperature.value),
-        bloodPressure: bloodPressure.value,
-        heartRate: parseFloat(heartRate.value),
-        respiratoryRate: parseFloat(respiratoryRate.value),
-      },
-    });
-    temperature.value = "";
-    bloodPressure.value = "";
-    heartRate.value = "";
-    respiratoryRate.value = "";
-
-    navigate("/");
+    id
+      ? handleUpdate(id, temperature, bloodPressure, heartRate, respiratoryRate)
+      : handleAdd(temperature, bloodPressure, heartRate, respiratoryRate);
   };
 
   return (
@@ -39,6 +34,7 @@ const VitalSignForm = () => {
             ref={(node) => {
               temperature = node;
             }}
+            defaultValue={data && data.vitalSign.temperature}
           />
         </Form.Group>
         <Form.Group>
@@ -49,6 +45,7 @@ const VitalSignForm = () => {
             ref={(node) => {
               bloodPressure = node;
             }}
+            defaultValue={data && data.vitalSign.bloodPressure}
           />
         </Form.Group>
         <Form.Group>
@@ -59,6 +56,7 @@ const VitalSignForm = () => {
             ref={(node) => {
               heartRate = node;
             }}
+            defaultValue={data && data.vitalSign.heartRate}
           />
         </Form.Group>
         <Form.Group>
@@ -69,6 +67,7 @@ const VitalSignForm = () => {
             ref={(node) => {
               respiratoryRate = node;
             }}
+            defaultValue={data && data.vitalSign.respiratoryRate}
           />
         </Form.Group>
         <button type="submit" className="btn btn-primary">

@@ -9,7 +9,8 @@ const VitalSign = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  console.log(data.vitalSigns);
+  console.log(error);
+
   return (
     <div>
       <Link to="/addVitalSign" className="btn btn-primary">
