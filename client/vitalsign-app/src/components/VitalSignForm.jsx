@@ -5,13 +5,15 @@ import {
   useAddVitalSign,
   useUpdateVitalSign,
   useGetVitalSignById,
+  useGetVitalSigns,
 } from "../hooks/useVitalSign";
 
 const VitalSignForm = () => {
   const { id } = useParams();
   const handleAdd = useAddVitalSign();
   const handleUpdate = useUpdateVitalSign();
-  const { loading, error, data } = useGetVitalSignById(id);
+  const { data } = useGetVitalSignById(id);
+  const { refetch } = useGetVitalSigns();
 
   let temperature, bloodPressure, heartRate, respiratoryRate;
 
@@ -19,12 +21,18 @@ const VitalSignForm = () => {
     e.preventDefault();
     id
       ? handleUpdate(id, temperature, bloodPressure, heartRate, respiratoryRate)
-      : handleAdd(temperature, bloodPressure, heartRate, respiratoryRate);
+      : handleAdd(
+          temperature,
+          bloodPressure,
+          heartRate,
+          respiratoryRate,
+          refetch
+        );
   };
 
   return (
     <div>
-      <h2>Vital Sign Form</h2>
+      {id ? <h2>Edit Vital Sign</h2> : <h2>Add Vital Sign</h2>}
       <form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Temperature</Form.Label>
@@ -70,7 +78,7 @@ const VitalSignForm = () => {
             defaultValue={data && data.vitalSign.respiratoryRate}
           />
         </Form.Group>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary mt-3">
           Submit
         </button>
       </form>

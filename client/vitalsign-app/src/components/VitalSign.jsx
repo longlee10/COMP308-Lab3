@@ -13,7 +13,7 @@ const VitalSign = () => {
 
   return (
     <div>
-      <Link to="/addVitalSign" className="btn btn-primary">
+      <Link to="/addVitalSign" className="btn btn-primary mb-3">
         Add Vital Sign
       </Link>
       <h2>Vital Signs</h2>

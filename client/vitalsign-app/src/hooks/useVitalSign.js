@@ -4,6 +4,7 @@ import {
   ADD_VITAL_SIGN,
   UPDATE_VITAL_SIGN,
   GET_VITAL_SIGN_BY_ID,
+  VITAL_SIGNS,
 } from "../queries/vitalSignQueries";
 
 const useAddVitalSign = () => {
@@ -14,7 +15,8 @@ const useAddVitalSign = () => {
     temperature,
     bloodPressure,
     heartRate,
-    respiratoryRate
+    respiratoryRate,
+    refetch
   ) => {
     addVitalSign({
       variables: {
@@ -31,6 +33,7 @@ const useAddVitalSign = () => {
     respiratoryRate.value = "";
 
     navigate("/");
+    refetch();
   };
 
   return handleAdd;
@@ -64,15 +67,20 @@ const useUpdateVitalSign = () => {
 };
 
 const useGetVitalSignById = (id) => {
-  if (id) {
-    const { loading, error, data } = useQuery(GET_VITAL_SIGN_BY_ID, {
-      variables: { id },
-    });
-
-    return { loading, error, data };
-  }
-
-  return {};
+  return id
+    ? useQuery(GET_VITAL_SIGN_BY_ID, {
+        variables: { id },
+      })
+    : {};
 };
 
-export { useAddVitalSign, useUpdateVitalSign, useGetVitalSignById };
+const useGetVitalSigns = () => {
+  return useQuery(VITAL_SIGNS);
+};
+
+export {
+  useAddVitalSign,
+  useUpdateVitalSign,
+  useGetVitalSignById,
+  useGetVitalSigns,
+};
